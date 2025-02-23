@@ -76,11 +76,14 @@ topic_name = 'insert_to_database'
 def add_reminder(json_reminder):
     try:
         # Deserialize if input is a string
+        logger.info("Received Input JSON to add_remainder function.")
         if isinstance(json_reminder, str):
             logger.debug("Deserializing input JSON string.")
             json_reminder = json.loads(json_reminder)
         
+        logger.info("Parse message date")
         message_date = json_reminder.get("message_date")
+        logger.info("Parse message")
         message = json_reminder.get("message")
 
         if not message_date or not message:
@@ -96,7 +99,7 @@ def add_reminder(json_reminder):
             password=DB_PASSWORD,
             port=DB_PORT
         )
-        cursor = connection.cursor()
+        cur = connection.cursor()
         logger.debug("Database connection established successfully.")
         
         # Insert the reminder into the database
@@ -106,7 +109,7 @@ def add_reminder(json_reminder):
         """
         logger.info("Executing the insert query cursor.")
         try:
-            cursor.execute(insert_query, (message_date, message))
+            cur.execute(insert_query, (message_date, message))
             logger.info("Reminder added to the database.")
         except Exception as e:
             logger.error(f"Error adding reminder to the database: {e}")
@@ -123,8 +126,8 @@ def add_reminder(json_reminder):
     
     finally:
         # Close the connection
-        if cursor:
-            cursor.close()
+        if cur:
+            cur.close()
             logger.debug("Database cursor closed.")
         if connection:
             connection.close()
