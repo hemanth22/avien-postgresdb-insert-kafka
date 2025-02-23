@@ -104,8 +104,13 @@ def add_reminder(json_reminder):
             INSERT INTO remainder_messages (message_date, message) 
             VALUES (TO_DATE(%s, 'DD-MM-YYYY'), %s)
         """
-        cursor.execute(insert_query, (message_date, message))
-        logger.info("Reminder added to the database.")
+        logger.info("Executing the insert query cursor.")
+        try:
+            cursor.execute(insert_query, (message_date, message))
+            logger.info("Reminder added to the database.")
+        except Exception as e:
+            logger.error(f"Error adding reminder to the database: {e}")
+            raise e
         
         # Commit the transaction
         connection.commit()
