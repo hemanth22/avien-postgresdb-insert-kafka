@@ -1,0 +1,7 @@
+requests
+six
+kafka-python==2.0.0
+kafka-python-ng
+fastapi
+uvicorn
+psycopg2-binary
